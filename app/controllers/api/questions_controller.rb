@@ -5,9 +5,9 @@ class Api::QuestionsController < ApplicationController
   end
 
   def show
-    question = Question.where(track_id: params[:track_id])
+    questions = Question.where(track_id: params[:track_id])
 
-    if question.present?
+    if questions.present?
       render json: questions
     else
       render_unavailable
@@ -18,7 +18,7 @@ class Api::QuestionsController < ApplicationController
     question = Question.create(params[:question])
 
     if question.valid?
-      client = Faye::Client.new('http://localhost:9393/faye')
+      client = Faye::Client.new('http://localhost:9292/faye')
       client.publish("/tracks/#{params[:question][:track_id]}", 'text' => question)
       render json: question, status: 201
     else

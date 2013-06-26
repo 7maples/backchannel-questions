@@ -6,8 +6,8 @@ describe Api::QuestionsController, :type => :controller do
     context "For all tracks" do
       describe "GET /api/questions" do
         it "should return a list of all questions" do
-          m1 = Question.create(body: "How much wood would a woodchuck chuck?", user_id: 1, track_id: 2)
-          m2 = Question.create(body: "If a woodchuck could chuck wood?", user_id: 2, track_id: 3)
+          q1 = Question.create(body: "How much wood would a woodchuck chuck?", user_id: 1, track_id: 2)
+          q2 = Question.create(body: "If a woodchuck could chuck wood?", user_id: 2, track_id: 3)
           questions = [q1, q2].to_json
 
           get "/api/questions"
@@ -23,17 +23,17 @@ describe Api::QuestionsController, :type => :controller do
       describe "GET /api/questions/:track_id" do
 
         it "should return a list of questions for a specific track" do
-          m1 = Question.create(body: "How big is the moon?", user_id: 1, track_id: 2)
-          m2 = Question.create(body: "How far away is the sun from Earth?", user_id: 2, track_id: 3)
+          q1 = Question.create(body: "How big is the moon?", user_id: 1, track_id: 2)
+          q2 = Question.create(body: "How far away is the sun from Earth?", user_id: 2, track_id: 3)
           questions = [q1].to_json
 
-          get "/api/questions/#{m1.track_id}"
+          get "/api/questions/#{q1.track_id}"
           expect(last_response.status).to eq 200
           expect(last_response.body).to eq questions
         end
 
         it "should return an error message if track doesn't exist" do
-          m1 = Question.create(body: "What's happening yall!!??", user_id: 1, track_id: 2)
+          q1 = Question.create(body: "What's happening yall!!??", user_id: 1, track_id: 2)
           get "/api/questions/77"
 
           error = {:error => "No track found"}
@@ -51,6 +51,10 @@ describe Api::QuestionsController, :type => :controller do
       describe "POST /api/questions" do
 
         it " should create a question with valid parameters" do
+          client = stub()
+          Faye::Client.stub(:new).with('http://localhost:9292/faye').and_return(client)
+          client.stub(:publish)
+
           post "/api/questions", question: { user_id:1,
                                            track_id:3,
                                            body: "Where is Andromeda?" }
