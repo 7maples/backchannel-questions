@@ -27,8 +27,7 @@ describe Api::QuestionsController, :type => :controller do
         expect(question.reload.vote_count).to eq 1
       end
 
-      it "should reorder questions based on votes" do
-
+      xit "validates so a vote isn't created without user id, etc" do
 
       end
     end
