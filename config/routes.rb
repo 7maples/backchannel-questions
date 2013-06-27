@@ -1,11 +1,14 @@
 BackchannelQuestions::Application.routes.draw do
 
   namespace :api do
-    resources :questions, only: [:index, :create]
-    get '/questions/:track_id', to: "questions#show", as: "track_questions"
-
-    post '/questions/vote', to: "questions#update", as: "votes"
+    resources :tracks, only: [] do
+      member do
+        resources :questions, only: [:index, :create] do
+          member do
+            post :vote
+          end
+        end
+      end
+    end
   end
-
-
 end
