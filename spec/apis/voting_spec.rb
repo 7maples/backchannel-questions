@@ -18,7 +18,7 @@ describe Api::QuestionsController, :type => :controller do
         }.to change(Vote, :count).by(1)
       end
 
-      xit "should prevent a user from voting more than once on a question" do
+      it "should prevent a user from voting more than once on a question" do
         question = Question.create(body: "What's happening yall!!??", user_id: 1, track_id: 2)
         post "/api/tracks/2/questions/#{question.id}/vote", {user_id: 1}
         post "/api/tracks/2/questions/#{question.id}/vote", {user_id: 1}
