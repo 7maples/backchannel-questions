@@ -98,4 +98,22 @@ describe Api::QuestionsController, :type => :controller do
 
   end
 
+  context "Voting on Questions" do
+    describe "Voting on a particular question" do
+
+      xit "should increment by one with a vote" do
+        question = Question.create(body: "What's happening yall!!??", user_id: 1, track_id: 2)
+        post "/api/questions/vote", {user_id: 1, id: question.id, track_id: 2}
+
+        expect(Question.last.vote_count).to eq 1
+      end
+
+
+
+      it "should reorder questions based on votes"
+
+
+    end
+  end
+
 end

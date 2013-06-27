@@ -26,6 +26,15 @@ class Api::QuestionsController < ApplicationController
     end
   end
 
+  def update
+    question = Question.find(params[:id])
+    if question
+      question.increment_vote
+    else
+      nil
+    end
+  end
+
   private
 
   def render_unavailable
