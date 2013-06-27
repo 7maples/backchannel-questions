@@ -24,8 +24,15 @@ class Api::QuestionsController < ApplicationController
 
   def vote
     question = Question.find(params[:id])
+
     if question
-      question.increment_vote
+      vote = Vote.find_by_user_id_and_question_id(params[:user_id], question.id)
+      if vote
+        nil
+      else
+        Vote.create(user_id: params[:user_id], question_id: question.id)
+        question.increment_vote
+      end
     else
       nil
     end

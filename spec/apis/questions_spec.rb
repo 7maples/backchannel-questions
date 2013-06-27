@@ -63,29 +63,8 @@ describe Api::QuestionsController, :type => :controller do
             expect(last_response.status).to eq 400
             expect(last_response.body).to eq error.to_json
           end
-
         end
       end
     end
-
   end
-
-  context "Voting on Questions" do
-    describe "Voting on a particular question" do
-
-      it "should increment by one with a vote" do
-        question = Question.create(body: "What's happening yall!!??", user_id: 1, track_id: 2)
-        post "/api/tracks/2/questions/#{question.id}/vote", {user_id: 1}
-
-        expect(question.reload.vote_count).to eq 1
-      end
-
-
-
-      it "should reorder questions based on votes"
-
-
-    end
-  end
-
 end
