@@ -26,10 +26,6 @@ describe Api::QuestionsController, :type => :controller do
 
         expect(question.reload.vote_count).to eq 1
       end
-
-      xit "validates so a vote isn't created without user id, etc" do
-
-      end
     end
   end
 end
