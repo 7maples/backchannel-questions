@@ -11,4 +11,9 @@ describe Vote do
     vote = Vote.new(question_id: 1)
     expect(vote).to have(1).errors_on(:user_id)
   end
+
+  it "should be invalid without a question_id" do
+    vote = Vote.new(user_id: 1)
+    expect(vote).to have(1).errors_on(:question_id)
+  end
 end
