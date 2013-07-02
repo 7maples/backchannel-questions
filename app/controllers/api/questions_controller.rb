@@ -6,7 +6,7 @@ class Api::QuestionsController < ApplicationController
     if questions.present?
       render json: questions
     else
-      render_unavailable
+      [].to_json
     end
   end
 
@@ -39,10 +39,6 @@ class Api::QuestionsController < ApplicationController
   end
 
   private
-
-  def render_unavailable
-    render json: {error: "No track found"}, status: 404
-  end
 
   def render_create_error(question)
     render json: {error: question.errors}, status: 400
