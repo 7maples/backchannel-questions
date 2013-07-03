@@ -17,14 +17,6 @@ describe Api::QuestionsController, :type => :controller do
           expect(last_response.status).to eq 200
           expect(last_response.body).to eq questions
         end
-
-        it "should return an error message if track doesn't exist" do
-          get "/api/tracks/33/questions"
-
-          error = {:error => "No track found"}
-          expect(last_response.status).to eq 404
-          expect(last_response.body).to eq error.to_json
-        end
       end
     end
   end

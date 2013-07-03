@@ -1,21 +1,16 @@
 class Api::QuestionsController < ApplicationController
 
   def index
-    questions = Question.where(track_id: params[:id])
-
-    if questions.present?
-      render json: questions
-    else
-      [].to_json
-    end
+    questions = Question.where(track_id: params[:track_id])
+    render json: questions
   end
 
   def create
-    question = Question.create(params[:question].merge(track_id: params[:id]))
+    question = Question.create(params[:question].merge(track_id: params[:track_id]))
 
     if question.valid?
       client = Faye::Client.new('http://localhost:9292/faye')
-      client.publish("/tracks/#{params[:id]}", 'text' => question)
+      client.publish("/tracks/#{params[:track_id]}/questions", 'text' => question)
       render json: question, status: 201
     else
       render_create_error(question)
@@ -24,21 +19,15 @@ class Api::QuestionsController < ApplicationController
 
   def vote
     question = Question.find(params[:id])
+    if vote = Vote.add_for_user_question(params[:vote][:user_id], question)
+      client = Faye::Client.new('http://localhost:9292/faye')
 
-    if question
-      vote = Vote.find_by_user_id_and_question_id(params[:user_id], question.id)
-      if vote
-        nil
-      else
-        Vote.create(user_id: params[:user_id], question_id: question.id)
-        question.increment_vote
-      end
-    else
-      nil
+      client.publish("/tracks/#{params[:track_id]}/questions/vote", 'text' => question)
     end
   end
 
   private
+
 
   def render_create_error(question)
     render json: {error: question.errors}, status: 400
